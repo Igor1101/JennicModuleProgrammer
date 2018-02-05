@@ -77,6 +77,8 @@ extern "C" {
 teStatus UART_eInitialise(char *pcDevice, int iBaudRate, int *piFileDescriptor, struct termios *psOptions);
 teStatus UART_eClose(int iFileDescriptor);
 teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int iBaudRate);
+teStatus UART_eSetRTS(int iFileDescriptor, int bValue);
+teStatus UART_eSetDTR(int iFileDescriptor, int bValue);
 teStatus UART_eFlush(int iFileDescriptor);
 teStatus UART_eRead(int iFileDescriptor, int iTimeoutMicroseconds, int iBufferLen, uint8_t *pu8Buffer, int *piBytesRead);
 teStatus UART_eWrite(int iFileDescriptor, uint8_t *pu8Data, int iLength);

@@ -208,22 +208,22 @@ teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int i
     {
     
     case 38400:     iBaud = B38400;
-    	break;
+    	    break;
 
     case 115200:    iBaud = B115200;
-		break;
+        break;
 
     case 230400:    iBaud = B230400;
-		break;
+        break;
 
 #ifdef B460800
     case 460800:    iBaud = B460800;
-		break;
+        break;
 #endif
 
 #ifdef B500000
     case 500000:    iBaud = B500000;
-		break;
+        break;
 #endif
 
 #ifdef B921600
@@ -241,8 +241,8 @@ teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int i
         DBG_vPrintf(TRACE_UART, "Unsupported baud rate: %d\n", iBaudRate);
         return E_STATUS_BAD_PARAMETER;
 #else
-		bSetNonPOSIXBaudRate = 1;
-		iBaud = B38400;
+        bSetNonPOSIXBaudRate = 1;
+        iBaud = B38400;
 #endif        
     }       
 
@@ -272,7 +272,8 @@ teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int i
 
 #if defined(__MACH__) && defined(__APPLE__)
 
-    if(bSetNonPOSIXBaudRate){
+    if(bSetNonPOSIXBaudRate)
+    {
         DBG_vPrintf(TRACE_UART, "Trying to set non-POSIX baud rate: %d\n", iBaudRate);
 	// The IOSSIOSPEED ioctl can be used to set arbitrary baud rates
 	// other than those specified by POSIX. The driver for the underlying serial hardware
@@ -280,7 +281,8 @@ teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int i
 	// and output speed.
 
         speed_t speed = iBaudRate;
-        if (ioctl(iFileDescriptor, IOSSIOSPEED, &speed) == -1) {
+        if(ioctl(iFileDescriptor, IOSSIOSPEED, &speed) == -1)
+        {
             DBG_vPrintf(TRACE_UART, "Error calling ioctl(..., IOSSIOSPEED, ...) %s(%d).\n", strerror(errno), errno);
             return E_STATUS_BAD_PARAMETER;
         }
@@ -291,6 +293,81 @@ teStatus UART_eSetBaudRate(int iFileDescriptor, struct termios *psOptions, int i
     return E_STATUS_OK;
 }
 
+/****************************************************************************
+ *
+ * NAME: UART_eSetRTS
+ *
+ * DESCRIPTION:
+ * Set or clear the RTS signal for the specified UART
+ *
+ * RETURNS:
+ * teStatus
+ *
+ ****************************************************************************/
+teStatus UART_eSetRTS(int iFileDescriptor, int bValue)
+{
+
+    int status;
+
+    if(ioctl(iFileDescriptor, TIOCMGET, &status) == -1)
+    {
+        perror("UART_eSetRTS(): TIOCMGET");
+        return E_STATUS_ERROR;
+    }
+    if(bValue)
+    {
+        status |= TIOCM_RTS;
+    }
+    else
+    {
+        status &= ~TIOCM_RTS;
+    }
+    if(ioctl(iFileDescriptor, TIOCMSET, &status) == -1)
+    {
+        perror("UART_eSetRTS(): TIOCMSET");
+        return E_STATUS_ERROR;
+    }
+    
+    return E_STATUS_OK;
+}
+
+/****************************************************************************
+ *
+ * NAME: UART_eSetDTR
+ *
+ * DESCRIPTION:
+ * Set or clear the DTR signal for the specified UART
+ *
+ * RETURNS:
+ * teStatus
+ *
+ ****************************************************************************/
+teStatus UART_eSetDTR(int iFileDescriptor, int bValue)
+{
+
+    int status;
+
+    if(ioctl(iFileDescriptor, TIOCMGET, &status) == -1)
+    {
+        perror("UART_eSetDTR(): TIOCMGET");
+        return E_STATUS_ERROR;
+    }
+    if (bValue)
+    {
+         status |= TIOCM_DTR;
+    }
+    else
+    {
+         status &= ~TIOCM_DTR;
+    }
+    if(ioctl(iFileDescriptor, TIOCMSET, &status) == -1)
+    {
+        perror("UART_eSetDTR(): TIOCMSET");
+        return E_STATUS_ERROR;
+    }
+    
+    return E_STATUS_OK;
+}
 
 /****************************************************************************
  *

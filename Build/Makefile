@@ -32,7 +32,7 @@ CFLAGS = -Wall -O2
 # CFLAGS += -DDEBUG_BOOTLOADER 
 
 # Define to trace firmware image info
-# #CFLAGS += -DDEBUG_FIRMWARE
+# CFLAGS += -DDEBUG_FIRMWARE
 
 # Define to trace serial comms
 # CFLAGS += -DDEBUG_UART

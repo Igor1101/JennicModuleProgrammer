@@ -53,6 +53,7 @@
 #include <getopt.h>
 #include <errno.h>
 #include <stdarg.h>
+#include <time.h>
 
 #include <sys/select.h>
 #include <sys/time.h>
@@ -208,6 +209,18 @@ int main(int argc, char *argv[])
         fprintf(stderr, "Error opening serial port\n");
         return -1;
     }
+
+    UART_eSetRTS(iUartFd, 1);				// nRESET
+    UART_eSetDTR(iUartFd, 1);				// nPROG
+    struct timespec ts;
+    ts.tv_sec  = 0;
+    ts.tv_nsec = 100000000;				// 100 ms
+    nanosleep(&ts, NULL);
+    UART_eSetRTS(iUartFd, 0);				// nRESET
+    ts.tv_sec  = 0;
+    ts.tv_nsec = 100000000;				// 100 ms
+    nanosleep(&ts, NULL);
+    UART_eSetDTR(iUartFd, 0);				// nPROG
 
     if (iInitialSpeed != iProgramSpeed)
     {
