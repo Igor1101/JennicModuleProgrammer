@@ -533,7 +533,7 @@ teStatus BL_eReprogram(int iUartFd, tsChipDetails *psChipDetails, tsFW_Info *psF
     if (memcmp(&psFWImage->u32ROMVersion, &psChipDetails->u32SupportedFirmware, 4) != 0)
     {
         printf("Incompatible firmware (Built for 0x%08x, Device is 0x%08x)\n", psFWImage->u32ROMVersion, psChipDetails->u32SupportedFirmware);
-        return E_STATUS_INCOMPATIBLE;
+        //return E_STATUS_INCOMPATIBLE;
     }
 
     /* First, depending on chip type, we may need to copy the MAC address into the firmware image
