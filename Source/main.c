@@ -54,6 +54,7 @@
 #include <errno.h>
 #include <stdarg.h>
 #include <time.h>
+#include <stdbool.h>
 
 #include <sys/select.h>
 #include <sys/time.h>
@@ -100,6 +101,7 @@ void print_usage_exit(char *argv[])
     fprintf(stderr, "    -f --firmware      <firmware>      Load module flash with the given firmware file.\n");
     fprintf(stderr, "    -v --verify                        Verify image. If specified, verify the image programmedwas loaded correctly.\n");
     fprintf(stderr, "    -m --mac           <MAC Address>   Set MAC address of device. If this is not specified, the address is read from flash.\n");
+    fprintf(stderr, "    -F --force_flash                  Ignore not critical errors and try to flash anyway.\n");
     exit(EXIT_FAILURE);
 }
 
@@ -126,12 +128,13 @@ int main(int argc, char *argv[])
             {"firmware",                required_argument,  NULL,       'f'},
             {"verify",                  no_argument,        NULL,       'v'},
             {"mac",                     required_argument,  NULL,       'm'},
+            {"force_flash",             no_argument,  NULL,       'F'},
             { NULL, 0, NULL, 0}
         };
         signed char opt;
         int option_index;
         
-        while ((opt = getopt_long(argc, argv, "hs:V:f:vI:P:m:", long_options, &option_index)) != -1) 
+        while ((opt = getopt_long(argc, argv, "hs:V:f:vI:P:m:F", long_options, &option_index)) != -1) 
         {
             switch (opt) 
             {
@@ -191,7 +194,10 @@ int main(int argc, char *argv[])
                     u64MAC_Address = strtoll(pcMAC_Address, (char **) NULL, 16);
                     pu64MAC_Address = &u64MAC_Address;
                     break;
-
+                case 'F':
+                    printf("Force write flash on\n");
+                    force_flash=true;
+                    break;
                 default: /* '?' */
                     print_usage_exit(argv);
             }
