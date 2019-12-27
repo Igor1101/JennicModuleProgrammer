@@ -136,7 +136,7 @@ int main(int argc, char *argv[])
         signed char opt;
         int option_index;
         
-        while ((opt = getopt_long(argc, argv, "hs:V:f:vI:P:m:F:N", long_options, &option_index)) != -1) 
+        while ((opt = getopt_long(argc, argv, "hs:V:f:vI:P:m:FN", long_options, &option_index)) != -1) 
         {
             switch (opt) 
             {
