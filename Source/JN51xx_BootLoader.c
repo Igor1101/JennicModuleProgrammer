@@ -166,6 +166,7 @@ typedef struct
 } tsBL_FlashDevice;
 
 bool force_flash=false;
+bool notverify=false;
 
 /****************************************************************************/
 /***        Local Function Prototypes                                     ***/
@@ -704,7 +705,8 @@ teStatus BL_eReprogram(int iUartFd, tsChipDetails *psChipDetails, tsFW_Info *psF
         {
             printf("Verifying Program in Flash\n\n");
         }
-
+        if(notverify == true)
+            return E_STATUS_OK;
         for(n = 0; n < psFWImage->u32ImageLength;)
         {
             if((psFWImage->u32ImageLength - n) > 128)

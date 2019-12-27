@@ -95,6 +95,7 @@ typedef struct
 /***        Exported Variables                                            ***/
 /****************************************************************************/
 extern bool force_flash;
+extern bool notverify;
 
 /****************************************************************************/
 /***        Local Variables                                               ***/

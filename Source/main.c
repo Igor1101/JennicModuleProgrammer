@@ -102,6 +102,7 @@ void print_usage_exit(char *argv[])
     fprintf(stderr, "    -v --verify                        Verify image. If specified, verify the image programmedwas loaded correctly.\n");
     fprintf(stderr, "    -m --mac           <MAC Address>   Set MAC address of device. If this is not specified, the address is read from flash.\n");
     fprintf(stderr, "    -F --force_flash                  Ignore not critical errors and try to flash anyway.\n");
+    fprintf(stderr, "    -N --notverify                    Dont verify after flash.\n");
     exit(EXIT_FAILURE);
 }
 
@@ -129,6 +130,7 @@ int main(int argc, char *argv[])
             {"verify",                  no_argument,        NULL,       'v'},
             {"mac",                     required_argument,  NULL,       'm'},
             {"force_flash",             no_argument,  NULL,       'F'},
+            {"notverify",               no_argument,  NULL,       'N'},
             { NULL, 0, NULL, 0}
         };
         signed char opt;
@@ -197,6 +199,10 @@ int main(int argc, char *argv[])
                 case 'F':
                     printf("Force write flash on\n");
                     force_flash=true;
+                    break;
+                case 'N':
+                    printf("Not verify written image set!\n");
+                    notverify=true;
                     break;
                 default: /* '?' */
                     print_usage_exit(argv);
